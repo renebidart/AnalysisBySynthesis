@@ -8,6 +8,7 @@ def squared_L2_loss(a, b, axes, keepdim=True):
 
 def KLD(mu_latent_q, sig_q=1., dim=-3):
     """
+    Get KLD over the n_samples dimension
 
     :param mu_latent_q: z must be shape (..., n_latent ...) at i-th pos
     :param sig_q:  scalar
@@ -21,11 +22,15 @@ def KLD(mu_latent_q, sig_q=1., dim=-3):
 def ELBOs(x_rec: torch.Tensor, samples_latent: torch.Tensor, x_orig: torch.Tensor,
           beta=1, dist_fct=squared_L2_loss,
           auto_batch_size=1600):
-    """
+    """ Computes loss even when there is an extra label and sample dimension for the tensor:
+    [bs=1, n_classes, n_samples, n_ch, nx, ny]
+
+    ??? WHy is the loss (including the KLD) divided by the size ???
+
     :param x_rec: shape (..., n_channels, nx, ny)
     :param samples_latent:  (..., n_latent, 1, 1)
     :param x_orig:  (..., n_channels, nx, ny)
-    :param beta:
+    :param beta: KLD WEIGHT
     :param dist_fct:
     :param auto_batch_size:
     :return:
